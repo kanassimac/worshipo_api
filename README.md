@@ -1,1 +1,1 @@
-# worshipo_api
+# worship_api
