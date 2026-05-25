@@ -408,6 +408,14 @@ function toggleRepeat(id) {
   st.repeat = !st.repeat;
   btn.classList.toggle('on', st.repeat);
   btn.title = st.repeat ? '重複播放：開啟中' : '單曲重複播放';
+
+  // 開啟重複時，若影片尚未播放則自動播放
+  if (st.repeat && st.player) {
+    const state = st.player.getPlayerState();
+    if (state !== YT.PlayerState.PLAYING && state !== YT.PlayerState.BUFFERING) {
+      st.player.playVideo();
+    }
+  }
 }
 
 // ── 更新播放圖示 ─────────────────────────────────
