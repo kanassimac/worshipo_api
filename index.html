@@ -24,10 +24,8 @@
   html, body { height: 100%; background: var(--gray-1); font-family: var(--font); color: var(--black); -webkit-font-smoothing: antialiased; }
   #app { max-width: 480px; margin: 0 auto; min-height: 100vh; display: flex; flex-direction: column; background: var(--white); }
 
-  .header { background: var(--blue); color: var(--white); padding: 20px 20px 0; flex-shrink: 0; }
-  .header-title    { font-size: 13px; opacity: 0.85; font-weight: 500; letter-spacing: 0.05em; }
-  .header-date     { font-size: 26px; font-weight: 700; margin-top: 4px; letter-spacing: -0.5px; }
-  .header-subtitle { font-size: 12px; opacity: 0.75; margin-top: 2px; margin-bottom: 16px; }
+  .header { background: var(--blue); color: var(--white); padding: 12px 20px; flex-shrink: 0; }
+  .header-date     { font-size: 13px; font-weight: 500; letter-spacing: 0.05em; opacity: 0.95; }
 
   .tabs { display: flex; background: var(--blue); padding: 0 12px; gap: 4px; }
   .tab-btn {
@@ -89,7 +87,7 @@
     transition: background 0.15s;
   }
   .yt-link-btn:active { background: #cc0000; }
-  .no-embed-hint { margin-top: 8px; font-size: 11px; color: var(--gray-3); line-height: 1.5; }
+  .no-embed-hint { margin-top: 8px; font-size: 15px; font-weight: 700; color: var(--black); line-height: 1.4; }
 
   /* Controls */
   .controls {
@@ -152,9 +150,7 @@
 <body>
 <div id="app">
   <div class="header">
-    <div class="header-title">花蓮靈糧堂 主日敬拜</div>
     <div class="header-date" id="header-date">載入中⋯</div>
-    <div class="header-subtitle">點擊播放，或查看歌詞</div>
   </div>
 
   <div class="tabs">
@@ -221,7 +217,7 @@ async function init() {
     if (worshipData.error) throw new Error(worshipData.error);
 
     document.getElementById('header-date').textContent =
-      (worshipData.date || '') + ' 主日';
+      (worshipData.date || '') + ' 主日敬拜曲目';
 
     await renderPanel('benta', worshipData.benta || []);
   } catch (err) {
