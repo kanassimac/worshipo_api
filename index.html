@@ -115,6 +115,16 @@
   .repeat-btn.on  { background: #E82E2E; }
   .repeat-btn:active { filter: brightness(0.85); }
 
+  .share-btn {
+    width: 44px; height: 44px; border-radius: 10px; border: none;
+    background: #06C755; color: var(--white);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; flex-shrink: 0;
+    transition: background 0.15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .share-btn:active { background: #05a847; }
+
   .lyrics-btn {
     flex: 1; height: 44px; border-radius: 10px; border: none;
     background: var(--blue-lt); color: var(--blue);
@@ -169,11 +179,27 @@
   </div>
 </div>
 
+<!-- LINE LIFF SDK -->
+<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 <!-- YouTube IFrame Player API -->
 <script src="https://www.youtube.com/iframe_api"></script>
 
 <script>
 const API_URL = 'https://script.google.com/macros/s/AKfycbxW5gGmEl-ion7DqmQYTiBgrTphc4wsagT1LOsE3-G2aqKmtJ4LWwITlUFkcYV7WQg/exec';
+
+// 儲存每首歌的名稱與歌詞，供分享使用
+const lyricsStore = {};
+
+// LIFF 初始化（分享功能需要）
+let liffReady = false;
+(async () => {
+  try {
+    await liff.init({ liffId: '2007192009-Dpm9R8wG' });
+    liffReady = true;
+  } catch (e) {
+    console.warn('LIFF init failed:', e);
+  }
+})();
 
 let worshipData = null;
 
@@ -268,6 +294,10 @@ async function renderPanel(tab, songs) {
 
 // ── 建立卡片 HTML ─────────────────────────────────
 function buildCard(id, song, embedOk) {
+  // 儲存歌名與歌詞供分享使用
+  if (song.lyrics) {
+    lyricsStore[id] = { name: song.name, lyrics: song.lyrics };
+  }
   const isResponse = song.name.startsWith('回應');
   const labelStyle = isResponse ? 'color:#e67e22;background:#fef5ec' : '';
   const labelText  = isResponse ? '回應詩歌' : '敬拜';
@@ -323,6 +353,12 @@ function buildCard(id, song, embedOk) {
     <button class="lyrics-btn" onclick="toggleLyrics('${id}')" id="lbtn-${id}">
       ${hasLyrics ? '顯示歌詞' : '暫無歌詞'}
     </button>
+    ${hasLyrics ? `
+    <button class="share-btn" title="分享歌詞" onclick="shareLyrics('${id}')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+        <path d="M18 16c-.8 0-1.5.3-2 .8l-7.3-4.2c.1-.2.1-.4.1-.6s0-.4-.1-.6L16 7.2c.5.5 1.2.8 2 .8 1.7 0 3-1.3 3-3s-1.3-3-3-3-3 1.3-3 3c0 .2 0 .4.1.6L7.8 9.8C7.3 9.3 6.6 9 5.8 9c-1.7 0-3 1.3-3 3s1.3 3 3 3c.8 0 1.5-.3 2-.8l7.3 4.2c-.1.2-.1.4-.1.6 0 1.6 1.3 2.9 2.9 2.9s2.9-1.3 2.9-2.9S19.6 16 18 16z"/>
+      </svg>
+    </button>` : ''}
   </div>
   <div class="lyrics-wrap" id="lyrics-${id}">
     ${hasLyrics
@@ -418,6 +454,39 @@ function updatePlayIcon(id, isPlaying) {
     ? 'M6 19h4V5H6v14zm8-14v14h4V5h-4z'  // pause
     : 'M8 5v14l11-7z'                       // play
   );
+}
+
+// ── 分享歌詞 ─────────────────────────────────────
+async function shareLyrics(id) {
+  const data = lyricsStore[id];
+  if (!data) return;
+
+  const text = data.name + '\n\n' + data.lyrics;
+
+  // 在 LIFF 環境內使用 shareTargetPicker
+  if (liffReady && liff.isInClient()) {
+    try {
+      await liff.shareTargetPicker([
+        {
+          type: 'text',
+          text: text
+        }
+      ]);
+    } catch (e) {
+      console.error('分享失敗:', e);
+    }
+    return;
+  }
+
+  // 非 LIFF 環境（瀏覽器測試）：用 Web Share API 或複製
+  if (navigator.share) {
+    try {
+      await navigator.share({ text: text });
+    } catch (e) { /* 使用者取消 */ }
+  } else {
+    await navigator.clipboard.writeText(text);
+    alert('歌詞已複製到剪貼簿');
+  }
 }
 
 // ── 歌詞切換 ─────────────────────────────────────
