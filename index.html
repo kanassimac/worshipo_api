@@ -135,11 +135,7 @@
   }
   .lyrics-wrap.open { display: block; }
   .lyrics-text { font-size: 14px; line-height: 1.85; color: var(--black); white-space: pre-wrap; word-break: break-word; }
-  .section-label {
-    display: block; font-size: 11px; font-weight: 700; color: var(--blue);
-    text-transform: uppercase; letter-spacing: 0.08em;
-    margin-top: 12px; margin-bottom: 2px;
-  }
+  /* .section-label 已移除（清洗移至 GAS 後端）*/
   .no-lyrics { font-size: 13px; color: var(--gray-3); font-style: italic; }
 
   .loading-state { padding: 48px 24px; text-align: center; color: var(--gray-4); }
@@ -438,14 +434,11 @@ function toggleLyrics(id) {
 
 // ── 歌詞格式化 ───────────────────────────────────
 function formatLyrics(raw) {
-  const re = /^(Blank|Intro|Verse\s*\d*|Pre\s*Chorus\s*\d*|PreChorus\s*\d*|Chorus\s*\d*|Bridge\s*\d*|Ending|Tag)$/i;
+  // GAS 後端已清洗段落標籤與非歌詞資訊，前端只做 HTML 跳脫
   return raw
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-    .split('\n')
-    .map(line => re.test(line.trim())
-      ? '<span class="section-label">' + line.trim() + '</span>'
-      : line)
-    .join('\n');
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
 }
 
 init();
