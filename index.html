@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>花蓮靈糧堂 主日敬拜曲目</title>
 <style>
-  /* ===== Reset & Base ===== */
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
@@ -22,274 +21,141 @@
     --font:    -apple-system, BlinkMacSystemFont, 'PingFang TC', 'Noto Sans TC', sans-serif;
   }
 
-  html, body {
-    height: 100%;
-    background: var(--gray-1);
-    font-family: var(--font);
-    color: var(--black);
-    -webkit-font-smoothing: antialiased;
-  }
+  html, body { height: 100%; background: var(--gray-1); font-family: var(--font); color: var(--black); -webkit-font-smoothing: antialiased; }
 
-  /* ===== Layout ===== */
-  #app {
-    max-width: 480px;
-    margin: 0 auto;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    background: var(--white);
-  }
+  #app { max-width: 480px; margin: 0 auto; min-height: 100vh; display: flex; flex-direction: column; background: var(--white); }
 
-  /* ===== Header ===== */
-  .header {
-    background: var(--blue);
-    color: var(--white);
-    padding: 20px 20px 0;
-    flex-shrink: 0;
-  }
+  /* Header */
+  .header { background: var(--blue); color: var(--white); padding: 20px 20px 0; flex-shrink: 0; }
+  .header-title    { font-size: 13px; opacity: 0.85; font-weight: 500; letter-spacing: 0.05em; }
+  .header-date     { font-size: 26px; font-weight: 700; margin-top: 4px; letter-spacing: -0.5px; }
+  .header-subtitle { font-size: 12px; opacity: 0.75; margin-top: 2px; margin-bottom: 16px; }
 
-  .header-title {
-    font-size: 13px;
-    opacity: 0.85;
-    font-weight: 500;
-    letter-spacing: 0.05em;
-  }
-
-  .header-date {
-    font-size: 26px;
-    font-weight: 700;
-    margin-top: 4px;
-    letter-spacing: -0.5px;
-  }
-
-  .header-subtitle {
-    font-size: 12px;
-    opacity: 0.75;
-    margin-top: 2px;
-    margin-bottom: 16px;
-  }
-
-  /* ===== Tabs ===== */
-  .tabs {
-    display: flex;
-    background: var(--blue);
-    padding: 0 12px;
-    gap: 4px;
-  }
-
+  /* Tabs */
+  .tabs { display: flex; background: var(--blue); padding: 0 12px; gap: 4px; }
   .tab-btn {
-    flex: 1;
-    padding: 10px 0;
-    background: rgba(255,255,255,0.15);
-    border: none;
-    border-radius: 8px 8px 0 0;
-    color: rgba(255,255,255,0.75);
-    font-size: 15px;
-    font-weight: 600;
-    font-family: var(--font);
-    cursor: pointer;
-    transition: background 0.2s, color 0.2s;
+    flex: 1; padding: 10px 0;
+    background: rgba(255,255,255,0.15); border: none; border-radius: 8px 8px 0 0;
+    color: rgba(255,255,255,0.75); font-size: 15px; font-weight: 600; font-family: var(--font);
+    cursor: pointer; transition: background 0.2s, color 0.2s;
   }
+  .tab-btn.active { background: var(--white); color: var(--blue); }
 
-  .tab-btn.active {
-    background: var(--white);
-    color: var(--blue);
-  }
+  /* Content */
+  .content { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  .tab-panel { display: none; padding: 16px 12px 32px; }
+  .tab-panel.active { display: block; }
 
-  /* ===== Content ===== */
-  .content {
-    flex: 1;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .tab-panel {
-    display: none;
-    padding: 16px 12px 32px;
-  }
-
-  .tab-panel.active {
-    display: block;
-  }
-
-  /* ===== Song Card ===== */
+  /* Song Card */
   .song-card {
-    background: var(--white);
-    border: 1px solid var(--gray-2);
-    border-radius: var(--radius);
-    margin-bottom: 16px;
-    overflow: hidden;
+    background: var(--white); border: 1px solid var(--gray-2);
+    border-radius: var(--radius); margin-bottom: 16px; overflow: hidden;
     box-shadow: 0 1px 4px rgba(0,0,0,0.06);
   }
 
-  /* YouTube player 容器 */
+  /* Song Name */
+  .song-name { padding: 10px 12px 0; font-size: 15px; font-weight: 700; color: var(--black); line-height: 1.4; }
+  .song-label {
+    font-size: 11px; font-weight: 500; color: var(--blue);
+    background: var(--blue-lt); padding: 2px 7px;
+    border-radius: 20px; display: inline-block; margin-bottom: 4px;
+  }
+
+  /* ── iframe 播放器 ── */
   .player-wrap {
-    position: relative;
-    width: 100%;
-    padding-top: 56.25%; /* 16:9 */
-    background: #000;
+    position: relative; width: 100%; padding-top: 56.25%;
+    background: #000; overflow: hidden;
   }
-
   .player-wrap iframe {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    border: none;
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;
   }
-
-  .player-placeholder {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    gap: 8px;
-    color: rgba(255,255,255,0.6);
-    font-size: 13px;
-    background: #111;
+  /* 載入中佔位 */
+  .player-wrap .player-loading {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    background: #111; color: rgba(255,255,255,0.4); font-size: 13px;
+    pointer-events: none;
   }
+  /* 播放器區隱藏（禁止嵌入時） */
+  .player-wrap.hidden { display: none; }
 
-  .player-placeholder svg {
-    opacity: 0.5;
-  }
-
-  /* ===== Controls ===== */
-  .controls {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 12px;
-    border-top: 1px solid var(--gray-2);
-  }
-
-  .ctrl-btn {
-    width: 44px;
-    height: 44px;
-    border-radius: 10px;
-    border: none;
-    background: var(--blue);
-    color: var(--white);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    flex-shrink: 0;
-    transition: background 0.15s;
-    -webkit-tap-highlight-color: transparent;
-  }
-
-  .ctrl-btn:active { background: var(--blue-dk); }
-
-  .lyrics-btn {
-    flex: 1;
-    height: 44px;
-    border-radius: 10px;
-    border: none;
-    background: var(--blue-lt);
-    color: var(--blue);
-    font-size: 14px;
-    font-weight: 600;
-    font-family: var(--font);
-    cursor: pointer;
-    transition: background 0.15s;
-    -webkit-tap-highlight-color: transparent;
-  }
-
-  .lyrics-btn:active { background: #d5e6f9; }
-
-  /* ===== Song Name ===== */
-  .song-name {
-    padding: 10px 12px 0;
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--black);
-    line-height: 1.4;
-  }
-
-  .song-name .song-label {
-    font-size: 11px;
-    font-weight: 500;
-    color: var(--blue);
-    background: var(--blue-lt);
-    padding: 2px 7px;
-    border-radius: 20px;
-    display: inline-block;
-    margin-bottom: 4px;
-  }
-
-  /* ===== Lyrics ===== */
-  .lyrics-wrap {
-    display: none;
-    padding: 12px 14px 14px;
+  /* ── 禁止嵌入提示區 ── */
+  .no-embed {
+    display: none; /* 預設隱藏，偵測到禁止嵌入後才顯示 */
+    padding: 16px 14px 14px;
     border-top: 1px solid var(--gray-2);
     background: var(--gray-1);
-    max-height: 320px;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
+    text-align: center;
+  }
+  .no-embed.visible { display: block; }
+
+  .yt-link-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 10px 20px; border-radius: 10px;
+    background: #FF0000; color: white;
+    font-size: 14px; font-weight: 600; font-family: var(--font);
+    text-decoration: none; cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: background 0.15s;
+  }
+  .yt-link-btn:active { background: #cc0000; }
+
+  .no-embed-hint {
+    margin-top: 8px; font-size: 11px; color: var(--gray-3); line-height: 1.5;
   }
 
+  /* ── Controls ── */
+  .controls {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 12px; border-top: 1px solid var(--gray-2);
+  }
+  /* 播放/暫停、重播 */
+  .ctrl-btn {
+    width: 44px; height: 44px; border-radius: 10px; border: none;
+    background: var(--blue); color: var(--white);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; flex-shrink: 0; transition: background 0.15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .ctrl-btn:active { background: var(--blue-dk); }
+  /* 禁止嵌入時，ctrl-btn 隱藏 */
+  .ctrl-btn.hidden { display: none; }
+
+  .lyrics-btn {
+    flex: 1; height: 44px; border-radius: 10px; border: none;
+    background: var(--blue-lt); color: var(--blue);
+    font-size: 14px; font-weight: 600; font-family: var(--font);
+    cursor: pointer; transition: background 0.15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .lyrics-btn:active { background: #d5e6f9; }
+
+  /* ── Lyrics ── */
+  .lyrics-wrap {
+    display: none; padding: 12px 14px 14px;
+    border-top: 1px solid var(--gray-2);
+    background: var(--gray-1); max-height: 340px;
+    overflow-y: auto; -webkit-overflow-scrolling: touch;
+  }
   .lyrics-wrap.open { display: block; }
-
-  .lyrics-text {
-    font-size: 14px;
-    line-height: 1.8;
-    color: var(--black);
-    white-space: pre-wrap;
-    word-break: break-word;
+  .lyrics-text { font-size: 14px; line-height: 1.85; color: var(--black); white-space: pre-wrap; word-break: break-word; }
+  .section-label {
+    display: block; font-size: 11px; font-weight: 700; color: var(--blue);
+    text-transform: uppercase; letter-spacing: 0.08em;
+    margin-top: 12px; margin-bottom: 2px;
   }
+  .no-lyrics { font-size: 13px; color: var(--gray-3); font-style: italic; }
 
-  .lyrics-text .section-label {
-    display: block;
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--blue);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-top: 12px;
-    margin-bottom: 4px;
-  }
-
-  .no-lyrics {
-    font-size: 13px;
-    color: var(--gray-3);
-    font-style: italic;
-  }
-
-  /* ===== Loading / Error ===== */
-  .loading-state {
-    padding: 48px 24px;
-    text-align: center;
-    color: var(--gray-4);
-  }
-
+  /* ── States ── */
+  .loading-state { padding: 48px 24px; text-align: center; color: var(--gray-4); }
   .loading-spinner {
-    width: 32px;
-    height: 32px;
-    border: 3px solid var(--gray-2);
-    border-top-color: var(--blue);
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-    margin: 0 auto 12px;
+    width: 32px; height: 32px; border: 3px solid var(--gray-2);
+    border-top-color: var(--blue); border-radius: 50%;
+    animation: spin 0.8s linear infinite; margin: 0 auto 12px;
   }
-
   @keyframes spin { to { transform: rotate(360deg); } }
-
-  .error-state {
-    padding: 40px 24px;
-    text-align: center;
-    color: #c0392b;
-    font-size: 14px;
-    line-height: 1.6;
-  }
-
-  .no-songs {
-    padding: 32px 16px;
-    text-align: center;
-    color: var(--gray-3);
-    font-size: 14px;
-  }
+  .error-state { padding: 40px 24px; text-align: center; color: #c0392b; font-size: 14px; line-height: 1.6; }
+  .no-songs { padding: 32px 16px; text-align: center; color: var(--gray-3); font-size: 14px; }
 </style>
 </head>
 <body>
@@ -297,7 +163,7 @@
   <div class="header">
     <div class="header-title">花蓮靈糧堂 主日敬拜</div>
     <div class="header-date" id="header-date">載入中⋯</div>
-    <div class="header-subtitle">點擊歌曲可播放，點按鈕可查看歌詞</div>
+    <div class="header-subtitle">點擊播放，或查看歌詞</div>
   </div>
 
   <div class="tabs">
@@ -312,241 +178,267 @@
         <div>載入資料中⋯</div>
       </div>
     </div>
-    <div class="tab-panel" id="panel-xinshu">
-      <!-- 切換時才載入 -->
-    </div>
+    <div class="tab-panel" id="panel-xinshu"></div>
   </div>
 </div>
 
 <script>
 // =============================================
-// 設定：把 GAS Web App 的部署 URL 填在這裡
+// 填入你的 GAS Web App 部署 URL
 // =============================================
-const API_URL = 'https://script.google.com/macros/s/AKfycbxW5gGmEl-ion7DqmQYTiBgrTphc4wsagT1LOsE3-G2aqKmtJ4LWwITlUFkcYV7WQg/exec';
+const API_URL = 'https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec';
 // =============================================
 
 let worshipData = null;
-let currentTab = 'benta';
-const players = {}; // { cardId: player }
 
-// ===== 載入資料 =====
+// 記錄每張卡片的播放狀態
+const playerState = {};
+
+// ── 偵測影片是否禁止嵌入 ──────────────────────────
+// YouTube 對禁止嵌入的影片，oEmbed API 會回傳 403 或無法取得
+// 更可靠的做法：嘗試 fetch oembed endpoint，失敗 = 禁止嵌入
+async function canEmbed(youtubeId) {
+  if (!youtubeId) return false;
+  try {
+    const url = 'https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v='
+                + youtubeId + '&format=json';
+    const res = await fetch(url);
+    return res.ok; // 200 = 可嵌入，非 200 = 禁止嵌入
+  } catch {
+    // 網路錯誤時，保守起見允許嵌入（實際載入 iframe 再判斷）
+    return true;
+  }
+}
+
+// ── 初始化 ────────────────────────────────────────
 async function init() {
   try {
     const res = await fetch(API_URL);
     if (!res.ok) throw new Error('HTTP ' + res.status);
     worshipData = await res.json();
-
     if (worshipData.error) throw new Error(worshipData.error);
 
-    // 更新日期
-    const dateEl = document.getElementById('header-date');
-    dateEl.textContent = worshipData.date
-      ? worshipData.date + ' 主日'
-      : '本週主日';
+    document.getElementById('header-date').textContent =
+      (worshipData.date || '') + ' 主日';
 
-    // 渲染本堂
-    renderPanel('benta', worshipData.benta || []);
-
+    await renderPanel('benta', worshipData.benta || []);
   } catch (err) {
     document.getElementById('panel-benta').innerHTML =
       '<div class="error-state">資料載入失敗<br><small>' + err.message + '</small></div>';
   }
 }
 
-// ===== 切換 Tab =====
+// ── Tab 切換 ──────────────────────────────────────
 function switchTab(tab) {
-  currentTab = tab;
-
-  // 更新按鈕
   document.querySelectorAll('.tab-btn').forEach((btn, i) => {
-    btn.classList.toggle('active', (i === 0 && tab === 'benta') || (i === 1 && tab === 'xinshu'));
+    btn.classList.toggle('active',
+      (i === 0 && tab === 'benta') || (i === 1 && tab === 'xinshu'));
   });
-
-  // 更新面板
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
   document.getElementById('panel-' + tab).classList.add('active');
 
-  // 若新秀還沒渲染
   if (tab === 'xinshu' && worshipData) {
     const panel = document.getElementById('panel-xinshu');
     if (!panel.dataset.rendered) {
-      renderPanel('xinshu', worshipData.xinshu || []);
       panel.dataset.rendered = '1';
+      renderPanel('xinshu', worshipData.xinshu || []);
     }
   }
 }
 
-// ===== 渲染面板 =====
-function renderPanel(tab, songs) {
+// ── 渲染面板 ─────────────────────────────────────
+async function renderPanel(tab, songs) {
   const panel = document.getElementById('panel-' + tab);
-
   if (!songs || songs.length === 0) {
     panel.innerHTML = '<div class="no-songs">本週暫無歌單資料</div>';
     return;
   }
 
-  let html = '';
-  songs.forEach((song, idx) => {
-    const cardId = tab + '-' + idx;
-    const isResponse = song.name.startsWith('回應');
-    html += buildSongCard(cardId, song, isResponse);
-  });
+  // 先用 oEmbed 批次檢查哪些可以嵌入
+  const embedChecks = await Promise.all(
+    songs.map(s => s.youtubeId ? canEmbed(s.youtubeId) : Promise.resolve(false))
+  );
 
-  panel.innerHTML = html;
+  panel.innerHTML = songs.map((s, i) =>
+    buildCard(tab + '-' + i, s, embedChecks[i])
+  ).join('');
 }
 
-// ===== 建立歌曲卡片 =====
-function buildSongCard(cardId, song, isResponse) {
-  const hasVideo = !!song.youtubeId;
-  const hasLyrics = !!song.lyrics;
+// ── 建立卡片 ─────────────────────────────────────
+function buildCard(id, song, embedOk) {
+  const isResponse = song.name.startsWith('回應');
+  const labelStyle = isResponse ? 'color:#e67e22;background:#fef5ec' : '';
+  const labelText  = isResponse ? '回應詩歌' : '敬拜';
+  const hasVideo   = !!song.youtubeId;
+  const hasLyrics  = !!song.lyrics;
+  const ytUrl      = hasVideo
+    ? 'https://www.youtube.com/watch?v=' + song.youtubeId
+    : '#';
 
-  const labelText = isResponse ? '回應詩歌' : '敬拜';
-  const labelColor = isResponse ? 'color: #e67e22; background: #fef5ec' : '';
+  // ── 播放器區 ──
+  let playerSection = '';
+  if (!hasVideo) {
+    // 沒有 YouTube 連結 → 不顯示播放器，不顯示提示
+    playerSection = '';
+  } else if (!embedOk) {
+    // 禁止嵌入 → 顯示 YouTube 連結按鈕 + 說明
+    playerSection = `
+      <div class="no-embed visible" id="noembed-${id}">
+        <a class="yt-link-btn" href="${ytUrl}" target="_blank" rel="noopener">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg>
+          點我到 YouTube 觀看
+        </a>
+        <div class="no-embed-hint">此影片版權設定不允許在外部網站播放</div>
+      </div>`;
+  } else {
+    // 可嵌入 → iframe 播放器
+    playerSection = `
+      <div class="player-wrap" id="pwrap-${id}">
+        <div class="player-loading">載入中⋯</div>
+        <iframe
+          src="https://www.youtube.com/embed/${song.youtubeId}?rel=0&playsinline=1&enablejsapi=1"
+          allow="autoplay; encrypted-media"
+          allowfullscreen
+          id="iframe-${id}"
+          onload="onIframeLoad('${id}','${ytUrl}')"
+        ></iframe>
+      </div>`;
+  }
+
+  // ── Controls ──
+  // 播放/暫停、重播按鈕：只有可嵌入時才顯示
+  const playBtns = (hasVideo && embedOk) ? `
+    <button class="ctrl-btn" id="playbtn-${id}" title="播放/暫停"
+            onclick="togglePlay('${id}')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+        <path id="icon-${id}" d="M8 5v14l11-7z"/>
+      </svg>
+    </button>
+    <button class="ctrl-btn" title="重播" onclick="replayVideo('${id}','${song.youtubeId}')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+        <path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/>
+      </svg>
+    </button>` : '';
 
   return `
-<div class="song-card" id="card-${cardId}">
+<div class="song-card">
   <div class="song-name">
-    <span class="song-label" style="${labelColor}">${labelText}</span>
+    <span class="song-label" style="${labelStyle}">${labelText}</span>
     <div>${song.name}</div>
   </div>
-
-  <div class="player-wrap" id="player-wrap-${cardId}">
-    ${hasVideo
-      ? `<div class="player-placeholder" id="placeholder-${cardId}" onclick="loadPlayer('${cardId}','${song.youtubeId}')">
-           <svg width="48" height="48" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
-           <span>點擊播放</span>
-         </div>`
-      : `<div class="player-placeholder"><span style="font-size:12px">無 YouTube 連結</span></div>`
-    }
-  </div>
-
+  ${playerSection}
   <div class="controls">
-    ${hasVideo
-      ? `<button class="ctrl-btn" title="播放/暫停" onclick="togglePlay('${cardId}','${song.youtubeId}')">
-           <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path id="icon-${cardId}" d="M8 5v14l11-7z"/></svg>
-         </button>
-         <button class="ctrl-btn" title="重播" onclick="replayVideo('${cardId}','${song.youtubeId}')">
-           <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>
-         </button>`
-      : `<button class="ctrl-btn" disabled style="opacity:0.35" title="無連結">
-           <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
-         </button>`
-    }
-    <button class="lyrics-btn" onclick="toggleLyrics('${cardId}')" id="lyrics-btn-${cardId}">
+    ${playBtns}
+    <button class="lyrics-btn" onclick="toggleLyrics('${id}')" id="lbtn-${id}">
       ${hasLyrics ? '顯示歌詞' : '暫無歌詞'}
     </button>
   </div>
-
-  <div class="lyrics-wrap" id="lyrics-${cardId}">
+  <div class="lyrics-wrap" id="lyrics-${id}">
     ${hasLyrics
-      ? `<div class="lyrics-text">${formatLyrics(song.lyrics)}</div>`
-      : `<div class="no-lyrics">歌詞資料暫未收錄</div>`
+      ? '<div class="lyrics-text">' + formatLyrics(song.lyrics) + '</div>'
+      : '<div class="no-lyrics">歌詞資料暫未收錄</div>'
     }
   </div>
 </div>`;
 }
 
-// ===== 格式化歌詞 =====
-function formatLyrics(raw) {
-  if (!raw) return '';
+// ── iframe 載入後偵測（double-check） ─────────────
+// oEmbed 可能有誤判，iframe onload 後再驗證一次
+// 若 iframe 裡實際是錯誤畫面（無法取得 contentDocument），
+// 通常是跨域限制，這時改以監聽 YouTube postMessage 偵測
+function onIframeLoad(id, ytUrl) {
+  const iframe = document.getElementById('iframe-' + id);
+  const pwrap  = document.getElementById('pwrap-' + id);
+  if (!iframe || !pwrap) return;
 
-  // 將 Verse/Chorus/Bridge/Pre Chorus/Intro 等標籤高亮
-  const sectionLabels = /^(Blank|Intro|Verse\s*\d*|Pre\s*Chorus|Chorus\s*\d*|Bridge\s*\d*|Ending|Tag|Pre\s*Chorus\s*\d*)$/im;
+  // 移除 loading 提示
+  const loading = pwrap.querySelector('.player-loading');
+  if (loading) loading.remove();
 
-  const escaped = raw
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
-
-  const lines = escaped.split('\n');
-  const result = lines.map(line => {
-    const trimmed = line.trim();
-    if (sectionLabels.test(trimmed)) {
-      return '<span class="section-label">' + trimmed + '</span>';
-    }
-    return line;
-  });
-
-  return result.join('\n');
+  // 設初始播放狀態
+  playerState[id] = { playing: false };
 }
 
-// ===== YouTube Player 控制 =====
-// 使用 iframe API（無 JS API 版本），透過 src 控制
+// 監聽 YouTube postMessage（偵測播放/暫停狀態，及禁止嵌入訊號）
+window.addEventListener('message', function(e) {
+  if (!e.data) return;
+  let data;
+  try { data = typeof e.data === 'string' ? JSON.parse(e.data) : e.data; } catch { return; }
 
-function loadPlayer(cardId, youtubeId) {
-  const wrap = document.getElementById('player-wrap-' + cardId);
-  const placeholder = document.getElementById('placeholder-' + cardId);
-
-  // 隱藏 placeholder，嵌入 iframe（autoplay=1）
-  if (placeholder) placeholder.style.display = 'none';
-
-  // 若已有 iframe 就不重建
-  if (wrap.querySelector('iframe')) return;
-
-  const iframe = document.createElement('iframe');
-  iframe.src = `https://www.youtube.com/embed/${youtubeId}?autoplay=1&rel=0&playsinline=1&enablejsapi=1`;
-  iframe.allow = 'autoplay; encrypted-media';
-  iframe.allowFullscreen = true;
-  iframe.id = 'iframe-' + cardId;
-  wrap.appendChild(iframe);
-
-  players[cardId] = { iframe, youtubeId, playing: true };
-  updatePlayIcon(cardId, true);
-}
-
-function togglePlay(cardId, youtubeId) {
-  const state = players[cardId];
-
-  // 若尚未載入，先載入並播放
-  if (!state) {
-    loadPlayer(cardId, youtubeId);
-    return;
+  // YouTube Player State 事件
+  if (data.event === 'infoDelivery' && data.info && typeof data.info.playerState !== 'undefined') {
+    // 找到對應的 iframe
+    const iframes = document.querySelectorAll('iframe[id^="iframe-"]');
+    iframes.forEach(iframe => {
+      if (iframe.contentWindow === e.source) {
+        const id = iframe.id.replace('iframe-', '');
+        const state = data.info.playerState;
+        // -1=未開始, 0=結束, 1=播放中, 2=暫停, 3=緩衝, 5=影片提示
+        if (playerState[id]) {
+          playerState[id].playing = (state === 1 || state === 3);
+          updatePlayIcon(id, playerState[id].playing);
+        }
+      }
+    });
   }
+});
 
-  // 已載入：用 postMessage 控制
+// ── 播放控制 ─────────────────────────────────────
+function togglePlay(id) {
+  const iframe = document.getElementById('iframe-' + id);
+  if (!iframe) return;
+  const state = playerState[id];
+  if (!state) return;
+
   if (state.playing) {
-    state.iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+    iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
     state.playing = false;
   } else {
-    state.iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+    iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
     state.playing = true;
   }
-  updatePlayIcon(cardId, state.playing);
+  updatePlayIcon(id, state.playing);
 }
 
-function replayVideo(cardId, youtubeId) {
-  const state = players[cardId];
-  if (!state) {
-    loadPlayer(cardId, youtubeId);
-    return;
-  }
-  // 重載 iframe 以重播
-  state.iframe.src = `https://www.youtube.com/embed/${youtubeId}?autoplay=1&rel=0&playsinline=1&enablejsapi=1`;
-  state.playing = true;
-  updatePlayIcon(cardId, true);
+function replayVideo(id, youtubeId) {
+  const iframe = document.getElementById('iframe-' + id);
+  if (!iframe) return;
+  iframe.src = 'https://www.youtube.com/embed/' + youtubeId
+             + '?autoplay=1&rel=0&playsinline=1&enablejsapi=1';
+  if (playerState[id]) playerState[id].playing = true;
+  updatePlayIcon(id, true);
 }
 
-function updatePlayIcon(cardId, isPlaying) {
-  const iconEl = document.getElementById('icon-' + cardId);
-  if (!iconEl) return;
-  // 播放中：顯示暫停圖示；暫停中：顯示播放圖示
-  iconEl.setAttribute('d', isPlaying
+function updatePlayIcon(id, isPlaying) {
+  const icon = document.getElementById('icon-' + id);
+  if (!icon) return;
+  icon.setAttribute('d', isPlaying
     ? 'M6 19h4V5H6v14zm8-14v14h4V5h-4z'  // pause
     : 'M8 5v14l11-7z'                       // play
   );
 }
 
-// ===== 顯示/隱藏歌詞 =====
-function toggleLyrics(cardId) {
-  const lyricsWrap = document.getElementById('lyrics-' + cardId);
-  const btn = document.getElementById('lyrics-btn-' + cardId);
-
-  const isOpen = lyricsWrap.classList.contains('open');
-  lyricsWrap.classList.toggle('open', !isOpen);
-  btn.textContent = isOpen ? '顯示歌詞' : '隱藏歌詞';
+// ── 歌詞切換 ─────────────────────────────────────
+function toggleLyrics(id) {
+  const wrap = document.getElementById('lyrics-' + id);
+  const btn  = document.getElementById('lbtn-' + id);
+  const open = wrap.classList.toggle('open');
+  btn.textContent = open ? '隱藏歌詞' : '顯示歌詞';
 }
 
-// ===== 啟動 =====
+// ── 歌詞格式化 ───────────────────────────────────
+function formatLyrics(raw) {
+  const re = /^(Blank|Intro|Verse\s*\d*|Pre\s*Chorus\s*\d*|PreChorus\s*\d*|Chorus\s*\d*|Bridge\s*\d*|Ending|Tag)$/i;
+  return raw
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .split('\n')
+    .map(line => re.test(line.trim())
+      ? '<span class="section-label">' + line.trim() + '</span>'
+      : line)
+    .join('\n');
+}
+
+// ── 啟動 ─────────────────────────────────────────
 init();
 </script>
 </body>
