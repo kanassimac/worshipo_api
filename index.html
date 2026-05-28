@@ -6,7 +6,6 @@
 <title>花蓮靈糧堂 主日敬拜曲目</title>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   :root {
     --blue:    #2E7EE8;
     --blue-dk: #1A5CBF;
@@ -20,13 +19,10 @@
     --radius:  12px;
     --font:    -apple-system, BlinkMacSystemFont, 'PingFang TC', 'Noto Sans TC', sans-serif;
   }
-
   html, body { height: 100%; background: var(--gray-1); font-family: var(--font); color: var(--black); -webkit-font-smoothing: antialiased; }
   #app { max-width: 480px; margin: 0 auto; min-height: 100vh; display: flex; flex-direction: column; background: var(--white); }
-
   .header { background: var(--blue); color: var(--white); padding: 12px 20px; flex-shrink: 0; }
-  .header-date     { font-size: 13px; font-weight: 500; letter-spacing: 0.05em; opacity: 0.95; }
-
+  .header-date { font-size: 13px; font-weight: 500; letter-spacing: 0.05em; opacity: 0.95; }
   .tabs { display: flex; background: var(--blue); padding: 0 12px; gap: 4px; }
   .tab-btn {
     flex: 1; padding: 10px 0;
@@ -35,25 +31,20 @@
     cursor: pointer; transition: background 0.2s, color 0.2s;
   }
   .tab-btn.active { background: var(--white); color: var(--blue); }
-
   .content { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
   .tab-panel { display: none; padding: 16px 12px 32px; }
   .tab-panel.active { display: block; }
-
   .song-card {
     background: var(--white); border: 1px solid var(--gray-2);
     border-radius: var(--radius); margin-bottom: 16px; overflow: hidden;
     box-shadow: 0 1px 4px rgba(0,0,0,0.06);
   }
-
   .song-name { padding: 10px 12px 0; font-size: 15px; font-weight: 700; color: var(--black); line-height: 1.4; }
   .song-label {
     font-size: 11px; font-weight: 500; color: var(--blue);
     background: var(--blue-lt); padding: 2px 7px;
     border-radius: 20px; display: inline-block; margin-bottom: 4px;
   }
-
-  /* 播放器容器：YouTube SDK 會在這裡插入 iframe */
   .player-wrap {
     position: relative; width: 100%; padding-top: 56.25%;
     background: #111; overflow: hidden;
@@ -71,8 +62,6 @@
     color: rgba(255,255,255,0.35); font-size: 13px; pointer-events: none;
     z-index: 1;
   }
-
-  /* 禁止嵌入 */
   .no-embed {
     padding: 16px 14px 14px;
     background: var(--gray-1); text-align: center;
@@ -88,8 +77,6 @@
   }
   .yt-link-btn:active { background: #cc0000; }
   .no-embed-hint { margin-top: 8px; font-size: 15px; font-weight: 700; color: var(--black); line-height: 1.4; }
-
-  /* Controls */
   .controls {
     display: flex; align-items: center; gap: 8px;
     padding: 10px 12px; border-top: 1px solid var(--gray-2);
@@ -102,8 +89,6 @@
     -webkit-tap-highlight-color: transparent;
   }
   .ctrl-btn:active { background: var(--blue-dk); }
-
-  /* 重複按鈕：平常藍，開啟時紅 */
   .repeat-btn {
     width: 44px; height: 44px; border-radius: 10px; border: none;
     background: var(--blue); color: var(--white);
@@ -114,7 +99,6 @@
   }
   .repeat-btn.on  { background: #E82E2E; }
   .repeat-btn:active { filter: brightness(0.85); }
-
   .share-btn {
     width: 44px; height: 44px; border-radius: 10px; border: none;
     background: #06C755; color: var(--white);
@@ -124,7 +108,6 @@
     -webkit-tap-highlight-color: transparent;
   }
   .share-btn:active { background: #05a847; }
-
   .lyrics-btn {
     flex: 1; height: 44px; border-radius: 10px; border: none;
     background: var(--blue-lt); color: var(--blue);
@@ -133,8 +116,6 @@
     -webkit-tap-highlight-color: transparent;
   }
   .lyrics-btn:active { background: #d5e6f9; }
-
-  /* Lyrics */
   .lyrics-wrap {
     display: none; padding: 12px 14px 14px;
     border-top: 1px solid var(--gray-2);
@@ -143,9 +124,7 @@
   }
   .lyrics-wrap.open { display: block; }
   .lyrics-text { font-size: 14px; line-height: 1.85; color: var(--black); white-space: pre-wrap; word-break: break-word; }
-  /* .section-label 已移除（清洗移至 GAS 後端）*/
   .no-lyrics { font-size: 13px; color: var(--gray-3); font-style: italic; }
-
   .loading-state { padding: 48px 24px; text-align: center; color: var(--gray-4); }
   .loading-spinner {
     width: 32px; height: 32px; border: 3px solid var(--gray-2);
@@ -162,12 +141,10 @@
   <div class="header">
     <div class="header-date" id="header-date">載入中⋯</div>
   </div>
-
   <div class="tabs">
     <button class="tab-btn active" onclick="switchTab('benta')">本堂</button>
     <button class="tab-btn"       onclick="switchTab('xinshu')">新秀</button>
   </div>
-
   <div class="content">
     <div class="tab-panel active" id="panel-benta">
       <div class="loading-state">
@@ -190,7 +167,7 @@ const API_URL = 'https://script.google.com/macros/s/AKfycbxW5gGmEl-ion7DqmQYTiBg
 // 儲存每首歌的名稱與歌詞，供分享使用
 const lyricsStore = {};
 
-// LIFF 初始化（分享功能需要）
+// LIFF 初始化
 let liffReady = false;
 (async () => {
   try {
@@ -207,7 +184,6 @@ let worshipData = null;
 let ytApiReady = false;
 const ytApiReadyCallbacks = [];
 
-// 全域 callback，YouTube SDK 載入完成後自動呼叫
 window.onYouTubeIframeAPIReady = function() {
   ytApiReady = true;
   ytApiReadyCallbacks.forEach(fn => fn());
@@ -234,17 +210,16 @@ async function canEmbed(youtubeId) {
   } catch { return true; }
 }
 
-// ── 初始化 ───────────────────────────────────────
+// ── 初始化（含 cache-busting） ───────────────────
 async function init() {
   try {
-    const res = await fetch(API_URL);
+    // ?t=timestamp 確保每次都取得最新資料，不走快取
+    const res = await fetch(`${API_URL}?t=${Date.now()}`);
     if (!res.ok) throw new Error('HTTP ' + res.status);
     worshipData = await res.json();
     if (worshipData.error) throw new Error(worshipData.error);
-
     document.getElementById('header-date').textContent =
       (worshipData.date || '') + ' 主日敬拜曲目';
-
     await renderPanel('benta', worshipData.benta || []);
   } catch (err) {
     document.getElementById('panel-benta').innerHTML =
@@ -260,7 +235,6 @@ function switchTab(tab) {
   });
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
   document.getElementById('panel-' + tab).classList.add('active');
-
   if (tab === 'xinshu' && worshipData) {
     const panel = document.getElementById('panel-xinshu');
     if (!panel.dataset.rendered) {
@@ -283,8 +257,6 @@ async function renderPanel(tab, songs) {
   panel.innerHTML = songs.map((s, i) =>
     buildCard(tab + '-' + i, s, embedChecks[i])
   ).join('');
-
-  // DOM 建立後，對每個可嵌入的影片初始化 YT.Player
   songs.forEach((s, i) => {
     if (s.youtubeId && embedChecks[i]) {
       initYTPlayer(tab + '-' + i, s.youtubeId);
@@ -294,7 +266,6 @@ async function renderPanel(tab, songs) {
 
 // ── 建立卡片 HTML ─────────────────────────────────
 function buildCard(id, song, embedOk) {
-  // 儲存歌名與歌詞供分享使用
   if (song.lyrics) {
     lyricsStore[id] = { name: song.name, lyrics: song.lyrics };
   }
@@ -307,7 +278,6 @@ function buildCard(id, song, embedOk) {
 
   let playerSection = '';
   if (hasVideo && !embedOk) {
-    // 禁止嵌入
     playerSection = `
       <div class="no-embed">
         <a class="yt-link-btn" href="${ytUrl}" target="_blank" rel="noopener">
@@ -319,7 +289,6 @@ function buildCard(id, song, embedOk) {
         <div class="no-embed-hint">此影片版權設定不允許在外部網站播放</div>
       </div>`;
   } else if (hasVideo && embedOk) {
-    // 可嵌入：放一個空 div，SDK 會替換成 iframe
     playerSection = `
       <div class="player-wrap">
         <div class="player-loading" id="ploading-${id}">載入中⋯</div>
@@ -369,25 +338,22 @@ function buildCard(id, song, embedOk) {
 </div>`;
 }
 
-// ── 初始化 YT.Player（使用官方 SDK） ─────────────
+// ── 初始化 YT.Player ──────────────────────────────
 function initYTPlayer(id, youtubeId) {
-  // 等 SDK 就緒後建立 Player
   whenYTReady(function() {
     players[id] = {
       player: null,
       repeat: false
     };
-
     const ytPlayer = new YT.Player('ytplayer-' + id, {
       videoId: youtubeId,
       playerVars: {
-        rel:        0,
-        playsinline: 1,
+        rel:            0,
+        playsinline:    1,
         modestbranding: 1,
       },
       events: {
         onReady: function(e) {
-          // 移除 loading 提示
           const loading = document.getElementById('ploading-' + id);
           if (loading) loading.remove();
           players[id].player = e.target;
@@ -395,17 +361,13 @@ function initYTPlayer(id, youtubeId) {
         onStateChange: function(e) {
           const st = players[id];
           if (!st) return;
-
           const state = e.data;
-          // YT.PlayerState: -1未開始, 0結束, 1播放, 2暫停, 3緩衝, 5提示
           if (state === YT.PlayerState.ENDED && st.repeat) {
-            // 單曲重複：播完後重頭播
             st.player.seekTo(0);
             st.player.playVideo();
             updatePlayIcon(id, true);
             return;
           }
-
           const isPlaying = (state === YT.PlayerState.PLAYING || state === YT.PlayerState.BUFFERING);
           updatePlayIcon(id, isPlaying);
         }
@@ -418,7 +380,6 @@ function initYTPlayer(id, youtubeId) {
 function togglePlay(id) {
   const st = players[id];
   if (!st || !st.player) return;
-
   const state = st.player.getPlayerState();
   if (state === YT.PlayerState.PLAYING) {
     st.player.pauseVideo();
@@ -432,12 +393,9 @@ function toggleRepeat(id) {
   const st  = players[id];
   const btn = document.getElementById('repeatbtn-' + id);
   if (!st || !btn) return;
-
   st.repeat = !st.repeat;
   btn.classList.toggle('on', st.repeat);
   btn.title = st.repeat ? '重複播放：開啟中' : '單曲重複播放';
-
-  // 開啟重複時，若影片尚未播放則自動播放
   if (st.repeat && st.player) {
     const state = st.player.getPlayerState();
     if (state !== YT.PlayerState.PLAYING && state !== YT.PlayerState.BUFFERING) {
@@ -451,8 +409,8 @@ function updatePlayIcon(id, isPlaying) {
   const icon = document.getElementById('icon-' + id);
   if (!icon) return;
   icon.setAttribute('d', isPlaying
-    ? 'M6 19h4V5H6v14zm8-14v14h4V5h-4z'  // pause
-    : 'M8 5v14l11-7z'                       // play
+    ? 'M6 19h4V5H6v14zm8-14v14h4V5h-4z'
+    : 'M8 5v14l11-7z'
   );
 }
 
@@ -460,25 +418,15 @@ function updatePlayIcon(id, isPlaying) {
 async function shareLyrics(id) {
   const data = lyricsStore[id];
   if (!data) return;
-
   const text = data.name + '\n\n' + data.lyrics;
-
-  // 在 LIFF 環境內使用 shareTargetPicker
   if (liffReady && liff.isInClient()) {
     try {
-      await liff.shareTargetPicker([
-        {
-          type: 'text',
-          text: text
-        }
-      ]);
+      await liff.shareTargetPicker([{ type: 'text', text: text }]);
     } catch (e) {
       console.error('分享失敗:', e);
     }
     return;
   }
-
-  // 非 LIFF 環境（瀏覽器測試）：用 Web Share API 或複製
   if (navigator.share) {
     try {
       await navigator.share({ text: text });
